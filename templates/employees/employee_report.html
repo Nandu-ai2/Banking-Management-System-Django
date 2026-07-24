@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Employee Report</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="{% static 'css/header.css' %}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="container">
+
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title">
+
+                Employee Report
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <form method="GET" class="form-inline">
+
+                <div class="form-group">
+
+                    <label>
+
+                        Start Date
+
+                    </label>
+
+                    <input
+                        type="date"
+                        name="start_date"
+                        class="form-control"
+                        value="{{ start_date }}">
+
+                </div>
+
+                <div class="form-group"
+                     style="margin-left:15px;">
+
+                    <label>
+
+                        End Date
+
+                    </label>
+
+                    <input
+                        type="date"
+                        name="end_date"
+                        class="form-control"
+                        value="{{ end_date }}">
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="margin-left:15px;">
+
+                    Filter
+
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    onclick="window.print();"
+                    style="margin-left:10px;">
+
+                    Print Report
+
+                </button>
+
+                <a href="{% url 'employees' %}"
+                   class="btn btn-default"
+                   style="margin-left:10px;">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="row" style="margin-bottom:20px;">
+
+        <div class="col-md-6">
+
+            <div class="panel panel-info">
+
+                <div class="panel-body text-center">
+
+                    <h4>Total Employees</h4>
+
+                    <h2>{{ total_employees }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="panel panel-success">
+
+                <div class="panel-body text-center">
+
+                    <h4>Total Salary</h4>
+
+                    <h2>₹ {{ total_salary }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+
+            <strong>
+
+                Employee Details
+
+            </strong>
+
+        </div>
+
+        <table class="table table-bordered table-striped table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Sl No</th>
+
+                    <th>Employee ID</th>
+
+                    <th>Name</th>
+
+                    <th>Department</th>
+
+                    <th>Designation</th>
+
+                    <th>Phone</th>
+
+                    <th>Email</th>
+
+                    <th>Salary</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for employee in employees %}
+
+                <tr>
+
+                    <td>{{ forloop.counter }}</td>
+
+                    <td>{{ employee.employee_id }}</td>
+
+                    <td>
+
+                        {{ employee.first_name }}
+                        {{ employee.last_name }}
+
+                    </td>
+
+                    <td>{{ employee.department }}</td>
+
+                    <td>{{ employee.designation }}</td>
+
+                    <td>{{ employee.phone }}</td>
+
+                    <td>{{ employee.email }}</td>
+
+                    <td>₹ {{ employee.salary }}</td>
+
+                    <td>
+
+                        {% if employee.status == "Active" %}
+
+                            <span class="label label-success">
+
+                                Active
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="label label-danger">
+
+                                Inactive
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="9"
+                        class="text-center">
+
+                        No Employees Found
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+            <tfoot>
+
+                <tr>
+
+                    <th colspan="7"
+                        class="text-right">
+
+                        Total Salary
+
+                    </th>
+
+                    <th colspan="2">
+
+                        ₹ {{ total_salary }}
+
+                    </th>
+
+                </tr>
+
+            </tfoot>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+window.onafterprint = function () {
+
+    window.location.reload();
+
+};
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Delete Employee</title>
+
+<link rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet"
+      href="{% static 'css/header.css' %}">
+<link rel="stylesheet"
+      href="{% static 'css/employees.css' %}">
+
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="container">
+
+<div class="panel panel-danger">
+
+<div class="panel-heading">
+
+<h3>
+
+<i class="material-icons">delete</i>
+
+Delete Employee
+
+</h3>
+
+</div>
+
+<div class="panel-body">
+
+<div class="alert alert-danger">
+
+<strong>Warning!</strong>
+
+This action cannot be undone.
+
+</div>
+
+<table class="table table-bordered">
+
+<tr>
+<th>Employee ID</th>
+<td>{{ employee.employee_id }}</td>
+</tr>
+
+<tr>
+<th>Employee Name</th>
+<td>{{ employee.first_name }} {{ employee.last_name }}</td>
+</tr>
+
+<tr>
+<th>Gender</th>
+<td>{{ employee.gender }}</td>
+</tr>
+
+<tr>
+<th>Department</th>
+<td>{{ employee.department }}</td>
+</tr>
+
+<tr>
+<th>Designation</th>
+<td>{{ employee.designation }}</td>
+</tr>
+
+<tr>
+<th>Salary</th>
+<td>₹ {{ employee.salary }}</td>
+</tr>
+
+<tr>
+<th>Phone</th>
+<td>{{ employee.phone }}</td>
+</tr>
+
+<tr>
+<th>Email</th>
+<td>{{ employee.email }}</td>
+</tr>
+
+<tr>
+<th>Address</th>
+<td>{{ employee.address }}</td>
+</tr>
+
+<tr>
+<th>Joining Date</th>
+<td>{{ employee.joining_date }}</td>
+</tr>
+
+<tr>
+<th>Status</th>
+
+<td>
+
+{% if employee.status == "Active" %}
+
+<span class="label label-success">
+
+Active
+
+</span>
+
+{% else %}
+
+<span class="label label-danger">
+
+Inactive
+
+</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+</table>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<button type="submit" class="btn btn-danger">
+
+<i class="material-icons">delete</i>
+
+Delete Employee
+
+</button>
+
+<a href="{% url 'employees' %}" class="btn btn-default">
+
+<i class="material-icons">arrow_back</i>
+
+Cancel
+
+</a>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

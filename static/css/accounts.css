@@ -1,0 +1,473 @@
+/* ==========================================
+   GOOGLE FONT
+========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+/* ==========================================
+   GENERAL
+========================================== */
+
+body{
+    background:#fff;
+    font-family:'Varela Round',sans-serif;
+    color:#566787;
+    font-size:14px;
+}
+
+/* ==========================================
+   TABLE WRAPPER
+========================================== */
+
+.table-wrapper{
+    background:#ffffff;
+    padding:20px;
+    margin:40px auto;
+    border-radius:10px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+/* ==========================================
+   TABLE HEADER
+========================================== */
+
+.table-title{
+    background:#435d7d;
+    color:#fff;
+    padding:18px 25px;
+    margin:-25px -25px 25px;
+    border-radius:10px 10px 0 0;
+}
+
+.table-title h2{
+    margin:0;
+    font-size:28px;
+    font-weight:600;
+}
+
+.table-title .text-right{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.table-title .btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:10px 18px;
+}
+.btn-primary{
+    background:#007bff;
+    border:none;
+    color:#fff;
+}
+
+.btn-primary:hover{
+    background:#0069d9;
+    color:#fff;
+}
+
+.table-title .btn:hover{
+    background:#218838;
+}
+
+.table-title .btn i{
+    margin-right:5px;
+}
+
+.table-title .btn span{
+    vertical-align:middle;
+}
+
+/* ==========================================
+   TABLE
+========================================== */
+
+.table{
+    margin-top: 10px;
+    margin-bottom:0;
+}
+
+.table th{
+    background:#f8f9fa;
+    color:#435d7d;
+    font-size:15px;
+    font-weight:bold;
+    letter-spacing:.3px;
+    text-align:center;
+}
+
+.table td{
+
+    text-align:center;
+
+    vertical-align:middle !important;
+
+    padding:15px;
+
+}
+
+.table-striped tbody tr:nth-child(odd){
+
+    background:#fcfcfc;
+
+}
+
+.table-hover tbody tr:hover{
+    background:#f4f9ff;
+    transition:.25s ease;
+}
+/* ===========================
+   Search Bar
+=========================== */
+
+.input-group {
+    width: 100%;
+}
+
+.input-group .form-control {
+    height: 42px;
+    font-size: 15px;
+    border-radius: 4px 0 0 4px;
+}
+
+.input-group-btn .btn {
+    height: 42px;
+    padding: 10px 18px;
+    border-radius: 0 4px 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.input-group-btn .material-icons {
+    font-size: 18px;
+}
+
+.table-wrapper form {
+    margin-bottom: 20px;
+}
+input[name="search"]{
+    width:100%;
+}
+/* ==========================================
+   ACTION BUTTONS
+========================================== */
+
+.edit{
+
+    color:#ffc107;
+
+    font-size:20px;
+
+    margin-right:10px;
+
+}
+
+.delete{
+
+    color:#dc3545;
+
+    font-size:20px;
+
+}
+
+.edit:hover{
+
+    color:#e0a800;
+
+    text-decoration:none;
+
+}
+
+.delete:hover{
+
+    color:#c82333;
+
+    text-decoration:none;
+
+}
+
+/* ==========================================
+   STATUS LABELS
+========================================== */
+
+.label{
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+}
+
+.label-success{
+
+    background:#28a745;
+
+}
+
+.label-danger{
+
+    background:#dc3545;
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.btn{
+    border-radius:6px;
+    transition:.25s ease;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-success{
+
+    background:#28a745;
+
+    border:none;
+
+}
+
+.btn-success:hover{
+
+    background:#218838;
+
+}
+
+.btn-primary{
+
+    background:#007bff;
+
+    border:none;
+
+}
+
+.btn-primary:hover{
+
+    background:#0069d9;
+
+}
+
+.btn-danger{
+
+    background:#dc3545;
+
+    border:none;
+
+}
+
+.btn-danger:hover{
+
+    background:#c82333;
+
+}
+
+.btn-default{
+
+    border-radius:5px;
+
+}
+.btn-xs{
+    margin-right:5px;
+    border-radius:4px;
+}
+/* ==========================================
+   FORMS
+========================================== */
+
+.form-control{
+
+    border-radius:5px;
+
+    box-shadow:none;
+
+    border:1px solid #ced4da;
+
+}
+
+.form-control:focus{
+
+    border-color:#435d7d;
+
+    box-shadow:0 0 8px rgba(67,93,125,.25);
+
+}
+
+/* ==========================================
+   TABLE RESPONSIVE
+========================================== */
+
+.table-responsive{
+
+    overflow-x:auto;
+
+}
+
+/* ==========================================
+   PAGINATION
+========================================== */
+
+.pagination{
+
+    margin-top:20px;
+
+    float:right;
+
+}
+
+.pagination>li>a{
+
+    color:#435d7d;
+
+}
+
+.pagination>.active>a{
+
+    background:#435d7d;
+
+    border-color:#435d7d;
+
+}
+.pagination>li>a,
+.pagination>li>span{
+    border-radius:4px !important;
+    margin:0 2px;
+}
+
+/* ==========================================
+   EMPTY TABLE
+========================================== */
+
+.table tbody td[colspan]{
+
+    text-align:center;
+
+    font-weight:bold;
+
+    color:#999;
+
+    padding:25px;
+
+}
+
+/* ==========================================
+   MODAL
+========================================== */
+
+.modal-header{
+
+    background:#435d7d;
+
+    color:#fff;
+
+}
+
+.modal-title{
+
+    font-weight:bold;
+
+}
+
+.modal-footer{
+
+    background:#f8f9fa;
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:992px){
+
+.table-title h2{
+
+font-size:24px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.table-wrapper{
+
+padding:15px;
+
+}
+
+.table-title{
+
+text-align:center;
+
+}
+
+.table-title .btn{
+
+float:none;
+
+display:block;
+
+width:100%;
+
+margin-top:15px;
+
+}
+
+.table{
+
+font-size:13px;
+
+}
+
+.table td,
+
+.table th{
+
+padding:10px;
+
+}
+
+.edit,
+
+.delete{
+
+font-size:18px;
+
+}
+
+}
+
+@media(max-width:576px){
+
+.table-title h2{
+
+font-size:20px;
+
+}
+
+.table{
+
+font-size:12px;
+
+}
+
+.btn{
+
+font-size:12px;
+
+padding:8px 12px;
+
+}
+
+}

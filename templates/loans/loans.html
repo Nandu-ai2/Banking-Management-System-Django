@@ -1,0 +1,452 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Loans</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet"
+          href="{% static 'css/header.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'css/loans.css' %}">
+
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+{% if messages %}
+<div class="container">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="container">
+
+    <div class="table-wrapper">
+
+        <div class="table-title">
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <h2>Manage <b>Loans</b></h2>
+
+                </div>
+
+                <div class="col-sm-6 text-right">
+
+    <a href="{% url 'loan_report' %}" class="btn btn-info">
+        Report
+    </a>
+
+    <a href="{% url 'export_loans_pdf' %}?{{ request.GET.urlencode }}"
+       class="btn btn-danger">
+        PDF
+    </a>
+
+    <a href="{% url 'export_loans_excel' %}?{{ request.GET.urlencode }}"
+       class="btn btn-success">
+        Excel
+    </a>
+
+    <a href="{% url 'export_loans_csv' %}?{{ request.GET.urlencode }}"
+       class="btn btn-primary">
+        CSV
+    </a>
+
+    <a href="{% url 'add_loan' %}" class="btn btn-success">
+        <i class="material-icons">add_circle</i>
+        <span>Add Loan</span>
+    </a>
+
+</div>
+
+            </div>
+
+        </div>
+
+        <!-- Filter Section -->
+
+        <form method="GET">
+
+            <div class="row" style="margin-bottom:20px;">
+
+                <div class="col-md-3">
+
+                    <input type="text"
+                           name="search"
+                           class="form-control"
+                           placeholder="Search..."
+                           value="{{ search }}">
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <select name="loan_type"
+                            class="form-control">
+
+                        <option value="">All Loan Types</option>
+
+                        <option value="Home Loan"
+                            {% if loan_type == "Home Loan" %}selected{% endif %}>
+                            Home Loan
+                        </option>
+
+                        <option value="Car Loan"
+                            {% if loan_type == "Car Loan" %}selected{% endif %}>
+                            Car Loan
+                        </option>
+
+                        <option value="Education Loan"
+                            {% if loan_type == "Education Loan" %}selected{% endif %}>
+                            Education Loan
+                        </option>
+
+                        <option value="Personal Loan"
+                            {% if loan_type == "Personal Loan" %}selected{% endif %}>
+                            Personal Loan
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <select name="status"
+                            class="form-control">
+
+                        <option value="">All Status</option>
+
+                        <option value="Active"
+                            {% if status == "Active" %}selected{% endif %}>
+                            Active
+                        </option>
+
+                        <option value="Closed"
+                            {% if status == "Closed" %}selected{% endif %}>
+                            Closed
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <select name="sort"
+                            class="form-control">
+
+                        <option value="-created_at"
+                            {% if sort == "-created_at" %}selected{% endif %}>
+                            Newest
+                        </option>
+
+                        <option value="loan_number"
+                            {% if sort == "loan_number" %}selected{% endif %}>
+                            Loan Number
+                        </option>
+
+                        <option value="loan_amount"
+                            {% if sort == "loan_amount" %}selected{% endif %}>
+                            Loan Amount (Low → High)
+                        </option>
+
+                        <option value="-loan_amount"
+                            {% if sort == "-loan_amount" %}selected{% endif %}>
+                            Loan Amount (High → Low)
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="material-icons">search</i>
+
+                        Filter
+
+                    </button>
+
+                    <a href="{% url 'loans' %}"
+                       class="btn btn-default">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <table class="table table-striped table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Sl No</th>
+                    <th>Loan Number</th>
+                    <th>Customer</th>
+                    <th>Account Number</th>
+                    <th>Loan Type</th>
+                    <th>Loan Amount</th>
+                    <th>EMI</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for loan in loans %}
+
+                <tr>
+
+                    <td>{{ loans.start_index|add:forloop.counter0 }}</td>
+
+                    <td>{{ loan.loan_number }}</td>
+
+                    <td>{{ loan.customer.first_name }} {{ loan.customer.last_name }}</td>
+
+                    <td>{{ loan.account.account_number }}</td>
+
+                    <td>{{ loan.loan_type }}</td>
+
+                    <td>₹ {{ loan.loan_amount }}</td>
+
+                    <td>₹ {{ loan.emi }}</td>
+                                        <td>
+
+                        {% if loan.status == "Active" %}
+
+                            <span class="label label-success">
+                                Active
+                            </span>
+
+                        {% else %}
+
+                            <span class="label label-danger">
+                                Closed
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        <a href="{% url 'edit_loan' loan.id %}"
+                           class="btn btn-info btn-sm">
+
+                            <i class="material-icons">edit</i>
+
+                        </a>
+
+                        <a href="{% url 'delete_loan' loan.id %}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this loan?')">
+
+                            <i class="material-icons">delete</i>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="9" class="text-center">
+
+                        <h4>No Loans Found</h4>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        <!-- Pagination -->
+
+        {% if loans.has_other_pages %}
+
+        <div class="row">
+
+            <div class="col-sm-6">
+
+                <p style="margin-top:25px;">
+
+                    Showing
+
+                    <strong>{{ loans.start_index }}</strong>
+
+                    to
+
+                    <strong>{{ loans.end_index }}</strong>
+
+                    of
+
+                    <strong>{{ loans.paginator.count }}</strong>
+
+                    Loans
+
+                </p>
+
+            </div>
+
+            <div class="col-sm-6 text-right">
+
+                <ul class="pagination">
+
+                    {% if loans.has_previous %}
+
+                        <li>
+
+                            <a href="?page=1&search={{ search }}&loan_type={{ loan_type }}&status={{ status }}&sort={{ sort }}">
+
+                                First
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="?page={{ loans.previous_page_number }}&search={{ search }}&loan_type={{ loan_type }}&status={{ status }}&sort={{ sort }}">
+
+                                Previous
+
+                            </a>
+
+                        </li>
+
+                    {% else %}
+
+                        <li class="disabled">
+
+                            <span>First</span>
+
+                        </li>
+
+                        <li class="disabled">
+
+                            <span>Previous</span>
+
+                        </li>
+
+                    {% endif %}
+
+                    {% for num in loans.paginator.page_range %}
+
+                        {% if loans.number == num %}
+
+                            <li class="active">
+
+                                <span>{{ num }}</span>
+
+                            </li>
+
+                        {% elif num > loans.number|add:'-3' and num < loans.number|add:'3' %}
+
+                            <li>
+
+                                <a href="?page={{ num }}&search={{ search }}&loan_type={{ loan_type }}&status={{ status }}&sort={{ sort }}">
+
+                                    {{ num }}
+
+                                </a>
+
+                            </li>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                    {% if loans.has_next %}
+
+                        <li>
+
+                            <a href="?page={{ loans.next_page_number }}&search={{ search }}&loan_type={{ loan_type }}&status={{ status }}&sort={{ sort }}">
+
+                                Next
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="?page={{ loans.paginator.num_pages }}&search={{ search }}&loan_type={{ loan_type }}&status={{ status }}&sort={{ sort }}">
+
+                                Last
+
+                            </a>
+
+                        </li>
+
+                    {% else %}
+
+                        <li class="disabled">
+
+                            <span>Next</span>
+
+                        </li>
+
+                        <li class="disabled">
+
+                            <span>Last</span>
+
+                        </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

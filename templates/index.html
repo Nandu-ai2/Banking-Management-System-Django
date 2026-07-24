@@ -1,0 +1,358 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking CRM Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="page-content">
+        <div class="dashboard-shell">
+        <section class="welcome-banner">
+            <div class="welcome-content">
+                <div>
+                    <p class="eyebrow">Banking CRM • Live Operations</p>
+                    <h1>Welcome back, Administrator</h1>
+                    <p class="welcome-subtitle">Monitor accounts, customers, loans, and transactions from a single premium workspace.</p>
+                </div>
+                <div class="welcome-meta">
+                    <div class="meta-pill">
+                        <i class="material-icons">calendar_today</i>
+                        <span>{% now "d M Y" %}</span>
+                    </div>
+                    <div class="meta-pill">
+                        <i class="material-icons">person</i>
+                        <span>Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-grid">
+            <a href="/accounts/" class="stat-card">
+                <div class="stat-icon blue"><i class="material-icons">account_balance</i></div>
+                <div class="stat-body">
+                    <h3>Accounts</h3>
+                    <div class="stat-value">{{ account_count }}</div>
+                    <p>Total Accounts</p>
+                </div>
+            </a>
+
+            <a href="/customers/" class="stat-card">
+                <div class="stat-icon navy"><i class="material-icons">people</i></div>
+                <div class="stat-body">
+                    <h3>Customers</h3>
+                    <div class="stat-value">{{ customer_count }}</div>
+                    <p>Total Customers</p>
+                </div>
+            </a>
+
+            <a href="/transactions/" class="stat-card">
+                <div class="stat-icon sky"><i class="material-icons">swap_horiz</i></div>
+                <div class="stat-body">
+                    <h3>Transactions</h3>
+                    <div class="stat-value">{{ transaction_count }}</div>
+                    <p>Total Transactions</p>
+                </div>
+            </a>
+
+            <a href="/loans/" class="stat-card">
+                <div class="stat-icon gold"><i class="material-icons">payments</i></div>
+                <div class="stat-body">
+                    <h3>Loans</h3>
+                    <div class="stat-value">{{ loan_count }}</div>
+                    <p>Total Loans</p>
+                </div>
+            </a>
+
+            <a href="/employees/" class="stat-card">
+                <div class="stat-icon red"><i class="material-icons">badge</i></div>
+                <div class="stat-body">
+                    <h3>Employees</h3>
+                    <div class="stat-value">{{ employee_count }}</div>
+                    <p>Total Employees</p>
+                </div>
+            </a>
+
+            <a href="#" class="stat-card">
+                <div class="stat-icon green"><i class="material-icons">account_balance_wallet</i></div>
+                <div class="stat-body">
+                    <h3>Balance</h3>
+                    <div class="stat-value">₹{{ total_balance }}</div>
+                    <p>Total Bank Balance</p>
+                </div>
+            </a>
+        </section>
+
+        <section class="panel-grid">
+            <div class="panel panel-chart panel-full">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="material-icons">bar_chart</i> Monthly Transactions</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="chart-wrap">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel-grid two-col">
+            <div class="panel panel-chart">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="material-icons">pie_chart</i> Account Type Distribution</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="chart-wrap chart-small">
+                        <canvas id="accountTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-chart">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="material-icons">hub</i> Employee Departments</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="chart-wrap chart-small">
+                        <canvas id="departmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel-grid">
+            <div class="panel panel-table">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="material-icons">history</i> Recent Transactions</h3>
+                </div>
+                <div class="panel-body table-panel-body">
+                    <div class="table-responsive">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Account</th>
+                                    <th>Customer</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transaction in recent_transactions %}
+                                    <tr>
+                                        <td>{{ transaction.transaction_date|date:"d M Y" }}</td>
+                                        <td>{{ transaction.account.account_number }}</td>
+                                        <td>{{ transaction.account.customer.first_name }} {{ transaction.account.customer.last_name }}</td>
+                                        <td>
+                                            {% if transaction.transaction_type == "Deposit" %}
+                                                <span class="status-badge success">Deposit</span>
+                                            {% elif transaction.transaction_type == "Withdraw" %}
+                                                <span class="status-badge danger">Withdraw</span>
+                                            {% else %}
+                                                <span class="status-badge neutral">{{ transaction.transaction_type }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>₹{{ transaction.amount }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="empty-state">No transactions yet.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel-grid two-col">
+            <div class="panel panel-table">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="material-icons">group</i> Recent Customers</h3>
+                </div>
+                <div class="panel-body table-panel-body">
+                    <div class="table-responsive">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>City</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in recent_customers %}
+                                    <tr>
+                                        <td>{{ customer.customer_id }}</td>
+                                        <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                                        <td>{{ customer.phone }}</td>
+                                        <td>{{ customer.city }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="empty-state">No customers available.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-tips">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="material-icons">lightbulb</i> Banking Tips</h3>
+                </div>
+                <div class="panel-body tip-grid">
+                    <div class="tip-card">
+                        <i class="material-icons">verified_user</i>
+                        <p>Verify customer identity before opening an account.</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="material-icons">monitor_heart</i>
+                        <p>Monitor large transactions regularly.</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="material-icons">description</i>
+                        <p>Update KYC documents periodically.</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="material-icons">lock</i>
+                        <p>Secure sensitive customer data and credentials.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel-grid two-col">
+            <div class="panel panel-chart">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="material-icons">account_balance</i> Quick Actions</h3>
+                </div>
+                <div class="panel-body quick-grid">
+                    <a href="/accounts/add/" class="quick-card">
+                        <i class="material-icons">add_circle</i>
+                        <span>Account</span>
+                    </a>
+                    <a href="/customers/add/" class="quick-card">
+                        <i class="material-icons">person_add</i>
+                        <span>Customer</span>
+                    </a>
+                    <a href="/transactions/add/" class="quick-card">
+                        <i class="material-icons">receipt_long</i>
+                        <span>Transaction</span>
+                    </a>
+                    <a href="/loans/add/" class="quick-card">
+                        <i class="material-icons">credit_score</i>
+                        <span>Loan</span>
+                    </a>
+                    <a href="/employees/add/" class="quick-card">
+                        <i class="material-icons">group_add</i>
+                        <span>Employee</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="panel panel-chart">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="material-icons">info</i> Bank Information</h3>
+                </div>
+                <div class="panel-body info-grid">
+                    <div class="info-card">
+                        <i class="material-icons">account_balance</i>
+                        <div>
+                            <p class="info-label">Accounts</p>
+                            <h4>{{ account_count }}</h4>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="material-icons">people</i>
+                        <div>
+                            <p class="info-label">Customers</p>
+                            <h4>{{ customer_count }}</h4>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="material-icons">swap_horiz</i>
+                        <div>
+                            <p class="info-label">Transactions</p>
+                            <h4>{{ transaction_count }}</h4>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="material-icons">payments</i>
+                        <div>
+                            <p class="info-label">Loans</p>
+                            <h4>{{ loan_count }}</h4>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="material-icons">badge</i>
+                        <div>
+                            <p class="info-label">Employees</p>
+                            <h4>{{ employee_count }}</h4>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="material-icons">account_balance_wallet</i>
+                        <div>
+                            <p class="info-label">Balance</p>
+                            <h4>₹{{ total_balance }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel-grid">
+            <div class="panel panel-chart panel-full">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="material-icons">analytics</i> Loan Status</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="chart-wrap chart-small">
+                        <canvas id="loanStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p><strong>Banking CRM Dashboard</strong></p>
+            <p>Developed with Django • Bootstrap • SQLite • Chart.js</p>
+        </footer>
+    </div>
+
+   <div id="dashboard-chart-data"
+     data-monthly-labels='{{ monthly_labels|safe }}'
+     data-monthly-values='{{ monthly_values|safe }}'
+     hidden>
+</div>
+
+<div id="analytics-data"
+     data-account-labels='{{ account_labels|safe }}'
+     data-account-values='{{ account_values|safe }}'
+     data-department-labels='{{ department_labels|safe }}'
+     data-department-values='{{ department_values|safe }}'
+     data-loan-labels='{{ loan_labels|safe }}'
+     data-loan-values='{{ loan_values|safe }}'
+     hidden>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+</body>
+</html>

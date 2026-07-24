@@ -1,0 +1,520 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Transactions</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet"
+          href="{% static 'css/header.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'css/transactions.css' %}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+{% if messages %}
+
+<div class="container">
+
+    {% for message in messages %}
+
+    <div class="alert alert-success alert-dismissible">
+
+        <button type="button"
+                class="close"
+                data-dismiss="alert">
+
+            &times;
+
+        </button>
+
+        {{ message }}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+<div class="container">
+
+    <div class="table-wrapper">
+
+        <div class="table-title">
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <h2>
+
+                        Manage <b>Transactions</b>
+
+                    </h2>
+
+                </div>
+
+                <div class="col-sm-6 text-right">
+
+    <a href="{% url 'transaction_report' %}" class="btn btn-info">
+        Report
+    </a>
+
+    <a href="{% url 'export_transactions_pdf' %}?{{ request.GET.urlencode }}" class="btn btn-danger">
+        PDF
+    </a>
+
+    <a href="{% url 'export_transactions_excel' %}?{{ request.GET.urlencode }}" class="btn btn-success">
+        Excel
+    </a>
+
+    <a href="{% url 'export_transactions_csv' %}?{{ request.GET.urlencode }}" class="btn btn-primary">
+        CSV
+    </a>
+
+    <a href="{% url 'add_transaction' %}" class="btn btn-success">
+        <i class="material-icons">add_circle</i>
+        <span>Add Transaction</span>
+    </a>
+
+</div>
+
+            </div>
+
+        </div>
+
+        <!-- Filter Section -->
+
+        <form method="GET">
+
+            <div class="row" style="margin-bottom:20px;">
+
+                <div class="col-md-4">
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search Account No, Customer..."
+                        value="{{ search }}">
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <select
+                        name="transaction_type"
+                        class="form-control">
+
+                        <option value="">
+
+                            All Transaction Types
+
+                        </option>
+
+                        <option value="Deposit"
+                            {% if transaction_type == "Deposit" %}selected{% endif %}>
+
+                            Deposit
+
+                        </option>
+
+                        <option value="Withdraw"
+                            {% if transaction_type == "Withdraw" %}selected{% endif %}>
+
+                            Withdraw
+
+                        </option>
+
+                        <option value="Transfer"
+                            {% if transaction_type == "Transfer" %}selected{% endif %}>
+
+                            Transfer
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <select
+                        name="sort"
+                        class="form-control">
+
+                        <option value="-transaction_date"
+                            {% if sort == "-transaction_date" %}selected{% endif %}>
+
+                            Newest
+
+                        </option>
+
+                        <option value="transaction_date"
+                            {% if sort == "transaction_date" %}selected{% endif %}>
+
+                            Oldest
+
+                        </option>
+
+                        <option value="amount"
+                            {% if sort == "amount" %}selected{% endif %}>
+
+                            Amount (Low → High)
+
+                        </option>
+
+                        <option value="-amount"
+                            {% if sort == "-amount" %}selected{% endif %}>
+
+                            Amount (High → Low)
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        <i class="material-icons">
+
+                            search
+
+                        </i>
+
+                        Filter
+
+                    </button>
+
+                    <a href="{% url 'transactions' %}"
+                       class="btn btn-default">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <table class="table table-striped table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Sl No</th>
+
+                    <th>Account No</th>
+
+                    <th>Customer</th>
+
+                    <th>Transaction Type</th>
+
+                    <th>Amount</th>
+
+                    <th>Date</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for transaction in transactions %}
+
+                <tr>
+
+                    <td>
+
+                        {{ transactions.start_index|add:forloop.counter0 }}
+
+                    </td>
+
+                    <td>
+
+                        {{ transaction.account.account_number }}
+
+                    </td>
+
+                    <td>
+
+                        {{ transaction.account.customer.first_name }}
+                        {{ transaction.account.customer.last_name }}
+
+                    </td>
+
+                    <td>
+
+                        {% if transaction.transaction_type == "Deposit" %}
+
+                            <span class="label label-success">
+
+                                Deposit
+
+                            </span>
+
+                        {% elif transaction.transaction_type == "Withdraw" %}
+
+                            <span class="label label-danger">
+
+                                Withdraw
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="label label-primary">
+
+                                Transfer
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        ₹ {{ transaction.amount }}
+
+                    </td>
+
+                    <td>
+
+                        {{ transaction.transaction_date|date:"d M Y H:i" }}
+
+                    </td>
+                                        <td>
+
+                        <a href="{% url 'edit_transaction' transaction.id %}"
+                           class="btn btn-info btn-sm">
+
+                            <i class="material-icons">
+
+                                edit
+
+                            </i>
+
+                        </a>
+
+                        <a href="{% url 'delete_transaction' transaction.id %}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this transaction?')">
+
+                            <i class="material-icons">
+
+                                delete
+
+                            </i>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="7"
+                        class="text-center">
+
+                        <h4>
+
+                            No Transactions Found
+
+                        </h4>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        <!-- Pagination -->
+
+        {% if transactions.has_other_pages %}
+
+        <div class="row">
+
+            <div class="col-sm-6">
+
+                <p style="margin-top:25px;">
+
+                    Showing
+
+                    <strong>{{ transactions.start_index }}</strong>
+
+                    to
+
+                    <strong>{{ transactions.end_index }}</strong>
+
+                    of
+
+                    <strong>{{ transactions.paginator.count }}</strong>
+
+                    Transactions
+
+                </p>
+
+            </div>
+
+            <div class="col-sm-6 text-right">
+
+                <ul class="pagination">
+
+                    {% if transactions.has_previous %}
+
+                        <li>
+
+                            <a href="?page=1&search={{ search }}&transaction_type={{ transaction_type }}&sort={{ sort }}">
+
+                                First
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="?page={{ transactions.previous_page_number }}&search={{ search }}&transaction_type={{ transaction_type }}&sort={{ sort }}">
+
+                                Previous
+
+                            </a>
+
+                        </li>
+
+                    {% else %}
+
+                        <li class="disabled">
+
+                            <span>First</span>
+
+                        </li>
+
+                        <li class="disabled">
+
+                            <span>Previous</span>
+
+                        </li>
+
+                    {% endif %}
+
+                    {% for num in transactions.paginator.page_range %}
+
+                        {% if transactions.number == num %}
+
+                            <li class="active">
+
+                                <span>{{ num }}</span>
+
+                            </li>
+
+                        {% elif num > transactions.number|add:'-3' and num < transactions.number|add:'3' %}
+
+                            <li>
+
+                                <a href="?page={{ num }}&search={{ search }}&transaction_type={{ transaction_type }}&sort={{ sort }}">
+
+                                    {{ num }}
+
+                                </a>
+
+                            </li>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                    {% if transactions.has_next %}
+
+                        <li>
+
+                            <a href="?page={{ transactions.next_page_number }}&search={{ search }}&transaction_type={{ transaction_type }}&sort={{ sort }}">
+
+                                Next
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="?page={{ transactions.paginator.num_pages }}&search={{ search }}&transaction_type={{ transaction_type }}&sort={{ sort }}">
+
+                                Last
+
+                            </a>
+
+                        </li>
+
+                    {% else %}
+
+                        <li class="disabled">
+
+                            <span>Next</span>
+
+                        </li>
+
+                        <li class="disabled">
+
+                            <span>Last</span>
+
+                        </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

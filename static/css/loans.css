@@ -1,0 +1,203 @@
+/* ==========================
+   GENERAL
+========================== */
+
+body{
+    background:#f5f5f5;
+    font-family:'Varela Round',sans-serif;
+    color:#566787;
+    font-size:14px;
+}
+
+/* ==========================
+   TABLE WRAPPER
+========================== */
+
+.table-wrapper{
+    background:#fff;
+    padding:25px;
+    margin:40px auto;
+    border-radius:10px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+/* ==========================
+   TABLE TITLE
+========================== */
+.table-title{
+    background:#435d7d;
+    color:#fff;
+    padding:18px 25px;
+    margin:-25px -25px 25px;
+    border-radius:10px 10px 0 0;
+}
+
+.table-title h2{
+    margin:0;
+    font-size:24px;
+    font-weight:600;
+}
+
+.table-title .text-right{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.table-title .btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:10px 18px;
+}
+
+.table-title .btn i{
+    font-size:18px;
+}
+/* ===========================
+   Search Bar
+=========================== */
+input[name="search"]{
+    width:100%;
+}
+
+.input-group {
+    width: 100%;
+}
+
+.input-group .form-control {
+    height: 42px;
+    font-size: 15px;
+    border-radius: 4px 0 0 4px;
+}
+
+.input-group-btn .btn {
+    height: 42px;
+    padding: 10px 18px;
+    border-radius: 0 4px 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.input-group-btn .material-icons {
+    font-size: 18px;
+}
+
+.table-wrapper form {
+    margin-bottom: 20px;
+}
+/* ==========================
+   TABLE
+========================== */
+.table th{
+    background:#f8f9fa;
+    color:#435d7d;
+    text-align:center;
+    font-size:15px;
+    font-weight:600;
+}
+
+.table td{
+    text-align:center;
+    vertical-align:middle !important;
+}
+
+.table-hover tbody tr:hover{
+    background:#f4f9ff;
+    transition:.25s ease;
+}
+
+
+
+/* ==========================
+   FORMS
+========================== */
+
+.form-control{
+    border-radius:4px;
+}
+
+.form-control:focus{
+    border-color:#435d7d;
+    box-shadow:0 0 6px rgba(67,93,125,.25);
+}
+
+label{
+    font-weight:600;
+}
+
+/* ==========================
+   LABELS
+========================== */
+
+.label{
+    padding:5px 14px;
+    border-radius:20px;
+    font-weight:600;
+}
+
+.label-success{
+    background:#28a745;
+}
+
+.label-danger{
+    background:#dc3545;
+}
+
+/* ==========================
+   BUTTONS
+========================== */
+
+.btn{
+    border-radius:6px;
+    transition:all .25s ease;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+.btn-sm{
+    margin-right:5px;
+}
+
+.btn i{
+    vertical-align:middle;
+    margin-right:4px;
+}
+
+/* ==========================
+   ALERT
+========================== */
+
+.alert{
+    margin-top:20px;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:768px){
+
+.table-title{
+    text-align:center;
+}
+
+.table-title .btn{
+    float:none;
+    width:100%;
+    margin-top:12px;
+}
+
+.table{
+    font-size:13px;
+}
+
+.btn{
+    margin-bottom:10px;
+    width:100%;
+}
+
+}

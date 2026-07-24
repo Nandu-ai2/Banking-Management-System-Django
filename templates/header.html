@@ -1,0 +1,103 @@
+{% load static %}
+
+<nav class="modern-navbar">
+
+    <div class="navbar-wrapper">
+
+        <!-- Logo -->
+
+        <a href="{% url 'home' %}" class="navbar-logo">
+
+            🏦 Bank Management System
+
+        </a>
+
+        <!-- Toggle Button -->
+
+        <button class="menu-toggle" id="menuToggle">
+
+            ☰
+
+        </button>
+
+        <!-- Navigation -->
+
+        <ul class="navbar-menu" id="navbarMenu">
+
+            <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                <a href="{% url 'home' %}">Dashboard</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'accounts' %}active{% endif %}">
+                <a href="{% url 'accounts' %}">Accounts</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'customers' %}active{% endif %}">
+                <a href="{% url 'customers' %}">Customers</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'transactions' %}active{% endif %}">
+                <a href="{% url 'transactions' %}">Transactions</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'loans' %}active{% endif %}">
+                <a href="{% url 'loans' %}">Loans</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'employees' %}active{% endif %}">
+                <a href="{% url 'employees' %}">Employees</a>
+            </li>
+
+        </ul>
+
+        <!-- User -->
+
+        <div class="navbar-user">
+
+            {% if user.is_authenticated %}
+
+                <span class="user-name">
+
+                    <i class="material-icons">person</i>
+
+                    {{ user.username }}
+
+                </span>
+
+                <a href="{% url 'logout' %}" class="logout-btn">
+
+                    <i class="material-icons">logout</i>
+
+                    Logout
+
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="logout-btn">
+
+                    Login
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+<script>
+
+const toggle=document.getElementById("menuToggle");
+
+const menu=document.getElementById("navbarMenu");
+
+toggle.onclick=function(){
+
+menu.classList.toggle("show");
+
+}
+
+</script>

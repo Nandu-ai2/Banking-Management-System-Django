@@ -1,0 +1,231 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Edit Loan</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet"
+      href="{% static 'css/header.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'css/loans.css' %}">
+
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="container">
+
+    <div class="panel panel-info">
+
+        <div class="panel-heading">
+
+            <h3>
+
+                <i class="material-icons">edit</i>
+
+                Edit Loan
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>Loan Number</label>
+
+                            {{ form.loan_number }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>Loan Type</label>
+
+                            {{ form.loan_type }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>Customer</label>
+
+                            {{ form.customer }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>Account</label>
+
+                            {{ form.account }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>Loan Amount</label>
+
+                            {{ form.loan_amount }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>Interest Rate (%)</label>
+
+                            {{ form.interest_rate }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>Duration (Months)</label>
+
+                            {{ form.duration }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>EMI</label>
+
+                            {{ form.emi }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>Status</label>
+
+                            {{ form.status }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>Start Date</label>
+
+                            {{ form.start_date }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>End Date</label>
+
+                            {{ form.end_date }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-primary">
+
+                    <i class="material-icons">save</i>
+
+                    Update Loan
+
+                </button>
+
+                <a href="{% url 'loans' %}" class="btn btn-default">
+
+                    <i class="material-icons">arrow_back</i>
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

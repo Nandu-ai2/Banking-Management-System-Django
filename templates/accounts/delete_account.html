@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Delete Account</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet"
+      href="{% static 'css/header.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'css/accounts.css' %}">
+
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="container">
+
+    <div class="panel panel-danger">
+
+        <div class="panel-heading">
+
+            <h3>
+
+                <i class="material-icons">delete</i>
+
+                Delete Account
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="alert alert-danger">
+
+                <strong>Warning!</strong>
+
+                This action cannot be undone.
+
+            </div>
+
+            <h4>
+
+                Are you sure you want to delete this account?
+
+            </h4>
+
+            <hr>
+
+            <table class="table table-bordered">
+
+                <tr>
+
+                    <th>Account Number</th>
+
+                    <td>{{ account.account_number }}</td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Customer</th>
+
+                    <td>
+
+                        {{ account.customer.first_name }}
+                        {{ account.customer.last_name }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Account Type</th>
+
+                    <td>{{ account.account_type }}</td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Balance</th>
+
+                    <td>₹ {{ account.balance }}</td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Status</th>
+
+                    <td>{{ account.status }}</td>
+
+                </tr>
+
+            </table>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-danger">
+
+                    <i class="material-icons">delete</i>
+
+                    Delete Account
+
+                </button>
+
+                <a href="{% url 'accounts' %}" class="btn btn-default">
+
+                    <i class="material-icons">arrow_back</i>
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

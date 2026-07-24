@@ -1,0 +1,228 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Account Report</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="{% static 'css/header.css' %}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="container">
+
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title">
+
+                Account Report
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <form method="GET" class="form-inline">
+
+                <div class="form-group">
+
+                    <label>
+
+                        Start Date
+
+                    </label>
+
+                    <input
+                        type="date"
+                        name="start_date"
+                        class="form-control"
+                        value="{{ start_date }}">
+
+                </div>
+
+                <div class="form-group"
+                     style="margin-left:15px;">
+
+                    <label>
+
+                        End Date
+
+                    </label>
+
+                    <input
+                        type="date"
+                        name="end_date"
+                        class="form-control"
+                        value="{{ end_date }}">
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="margin-left:15px;">
+
+                    Filter
+
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    onclick="window.print();"
+                    style="margin-left:10px;">
+
+                    Print Report
+
+                </button>
+
+                <a href="{% url 'accounts' %}"
+                   class="btn btn-default"
+                   style="margin-left:10px;">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+
+            <strong>
+
+                Total Accounts :
+                {{ total_accounts }}
+
+            </strong>
+
+        </div>
+
+        <table class="table table-bordered table-striped">
+
+            <thead>
+
+                <tr>
+
+                    <th>Sl No</th>
+
+                    <th>Account Number</th>
+
+                    <th>Customer ID</th>
+
+                    <th>Customer Name</th>
+
+                    <th>Account Type</th>
+
+                    <th>Phone</th>
+
+                    <th>Balance</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for account in accounts %}
+
+                <tr>
+
+                    <td>{{ forloop.counter }}</td>
+
+                    <td>{{ account.account_number }}</td>
+
+                    <td>{{ account.customer.customer_id }}</td>
+
+                    <td>
+
+                        {{ account.customer.first_name }}
+                        {{ account.customer.last_name }}
+
+                    </td>
+
+                    <td>{{ account.account_type }}</td>
+
+                    <td>{{ account.phone }}</td>
+
+                    <td>₹ {{ account.balance }}</td>
+
+                    <td>{{ account.status }}</td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="8"
+                        class="text-center">
+
+                        No Records Found
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+            <tfoot>
+
+    <tr>
+
+        <th colspan="6"
+            class="text-right">
+
+            Total Balance
+
+        </th>
+
+        <th colspan="2">
+
+            ₹ {{ total_balance }}
+
+        </th>
+
+    </tr>
+
+</tfoot>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

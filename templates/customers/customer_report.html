@@ -1,0 +1,227 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Report</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="{% static 'css/header.css' %}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="container">
+
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title">
+
+                Customer Report
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <form method="GET" class="form-inline">
+
+                <div class="form-group">
+
+                    <label>
+
+                        Start Date
+
+                    </label>
+
+                    <input
+                        type="date"
+                        name="start_date"
+                        class="form-control"
+                        value="{{ start_date }}">
+
+                </div>
+
+                <div class="form-group"
+                     style="margin-left:15px;">
+
+                    <label>
+
+                        End Date
+
+                    </label>
+
+                    <input
+                        type="date"
+                        name="end_date"
+                        class="form-control"
+                        value="{{ end_date }}">
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="margin-left:15px;">
+
+                    Filter
+
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    onclick="window.print();"
+                    style="margin-left:10px;">
+
+                    Print Report
+
+                </button>
+
+                <a href="{% url 'customers' %}"
+                   class="btn btn-default"
+                   style="margin-left:10px;">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+
+            <strong>
+
+                Total Customers :
+                {{ total_customers }}
+
+            </strong>
+
+        </div>
+
+        <table class="table table-bordered table-striped">
+
+            <thead>
+
+                <tr>
+
+                    <th>Sl No</th>
+
+                    <th>Customer ID</th>
+
+                    <th>Full Name</th>
+
+                    <th>Gender</th>
+
+                    <th>Phone</th>
+
+                    <th>Email</th>
+
+                    <th>City</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for customer in customers %}
+
+                <tr>
+
+                    <td>{{ forloop.counter }}</td>
+
+                    <td>{{ customer.customer_id }}</td>
+
+                    <td>
+
+                        {{ customer.first_name }}
+                        {{ customer.last_name }}
+
+                    </td>
+
+                    <td>{{ customer.gender }}</td>
+
+                    <td>{{ customer.phone }}</td>
+
+                    <td>{{ customer.email }}</td>
+
+                    <td>{{ customer.city }}</td>
+
+                    <td>
+
+                        {% if customer.status == "Active" %}
+
+                            <span class="label label-success">
+
+                                Active
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="label label-danger">
+
+                                Inactive
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="8"
+                        class="text-center">
+
+                        No Customers Found
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

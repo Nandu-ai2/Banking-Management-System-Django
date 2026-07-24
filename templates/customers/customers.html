@@ -1,0 +1,599 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Customers</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet"
+          href="{% static 'css/header.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'css/customers.css' %}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+{% include 'header.html' %}
+
+{% if messages %}
+
+<div class="container">
+
+    {% for message in messages %}
+
+    <div class="alert alert-success alert-dismissible">
+
+        <button type="button"
+                class="close"
+                data-dismiss="alert">
+
+            &times;
+
+        </button>
+
+        {{ message }}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+<div class="container">
+
+    <div class="table-wrapper">
+
+        <div class="table-title">
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <h2>
+
+                        Manage <b>Customers</b>
+
+                    </h2>
+
+                </div>
+                <div class="col-sm-6">
+
+    <div class="pull-right action-buttons">
+
+        <a href="{% url 'customer_report' %}"
+           class="btn btn-info">
+            Report
+        </a>
+
+        <a href="{% url 'export_customers_pdf' %}?{{ request.GET.urlencode }}"
+           class="btn btn-danger">
+            PDF
+        </a>
+
+        <a href="{% url 'export_customers_excel' %}?{{ request.GET.urlencode }}"
+           class="btn btn-success">
+            Excel
+        </a>
+
+        <a href="{% url 'export_customers_csv' %}?{{ request.GET.urlencode }}"
+           class="btn btn-primary">
+            CSV
+        </a>
+
+        <a href="{% url 'add_customer' %}"
+           class="btn btn-success">
+            <i class="material-icons">person_add</i>
+            <span>Add Customer</span>
+        </a>
+
+    </div>
+
+</div>
+
+                
+
+            </div>
+
+        </div>
+
+        <!-- Search + Filters -->
+
+        <form method="GET">
+
+            <div class="row"
+                 style="margin-bottom:20px;">
+
+                <div class="col-sm-3">
+
+                    <input type="text"
+                           name="search"
+                           class="form-control"
+                           placeholder="Search Customer..."
+                           value="{{ search }}">
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <select name="gender"
+                            class="form-control">
+
+                        <option value="">
+
+                            All Gender
+
+                        </option>
+
+                        <option value="Male"
+                                {% if gender == "Male" %}selected{% endif %}>
+
+                            Male
+
+                        </option>
+
+                        <option value="Female"
+                                {% if gender == "Female" %}selected{% endif %}>
+
+                            Female
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <select name="status"
+                            class="form-control">
+
+                        <option value="">
+
+                            All Status
+
+                        </option>
+
+                        <option value="Active"
+                                {% if status == "Active" %}selected{% endif %}>
+
+                            Active
+
+                        </option>
+
+                        <option value="Inactive"
+                                {% if status == "Inactive" %}selected{% endif %}>
+
+                            Inactive
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <select name="sort"
+                            class="form-control">
+
+                        <option value="-customer_id"
+                                {% if sort == "-customer_id" %}selected{% endif %}>
+
+                            Newest
+
+                        </option>
+
+                        <option value="customer_id"
+                                {% if sort == "customer_id" %}selected{% endif %}>
+
+                            Customer ID
+
+                        </option>
+
+                        <option value="first_name"
+                                {% if sort == "first_name" %}selected{% endif %}>
+
+                            First Name
+
+                        </option>
+
+                        <option value="city"
+                                {% if sort == "city" %}selected{% endif %}>
+
+                            City
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-sm-3">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="material-icons">
+
+                            search
+
+                        </i>
+
+                        Search
+
+                    </button>
+
+                    <a href="{% url 'customers' %}"
+                       class="btn btn-default">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <table class="table table-striped table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Sl No</th>
+
+                    <th>Customer ID</th>
+
+                    <th>Full Name</th>
+
+                    <th>Gender</th>
+
+                    <th>Phone</th>
+
+                    <th>Email</th>
+
+                    <th>City</th>
+
+                    <th>Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for customer in customers %}
+
+                <tr>
+
+                    <td>
+
+                        {{ customers.start_index|add:forloop.counter0 }}
+
+                    </td>
+
+                    <td>
+
+                        {{ customer.customer_id }}
+
+                    </td>
+
+                    <td>
+
+                        {{ customer.first_name }}
+                        {{ customer.last_name }}
+
+                    </td>
+
+                    <td>
+
+                        {{ customer.gender }}
+
+                    </td>
+
+                    <td>
+
+                        {{ customer.phone }}
+
+                    </td>
+
+                    <td>
+
+                        {{ customer.email }}
+
+                    </td>
+
+                    <td>
+
+                        {{ customer.city }}
+
+                    </td>
+
+                    <td>
+
+                        {% if customer.status == "Active" %}
+
+                            <span class="label label-success">
+
+                                Active
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="label label-danger">
+
+                                Inactive
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        <a href="{% url 'edit_customer' customer.id %}"
+                           class="btn btn-info btn-sm"
+                           title="Edit">
+
+                            <i class="material-icons">
+
+                                edit
+
+                            </i>
+
+                        </a>
+
+                        <a href="{% url 'delete_customer' customer.id %}"
+                           class="btn btn-danger btn-sm"
+                           title="Delete"
+                           onclick="return confirm('Are you sure you want to delete this customer?')">
+
+                            <i class="material-icons">
+
+                                delete
+
+                            </i>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+                                {% empty %}
+
+                <tr>
+
+                    <td colspan="9"
+                        class="text-center">
+
+                        {% if search %}
+
+                            <h4>
+
+                                No matching customers found.
+
+                            </h4>
+
+                        {% else %}
+
+                            <h4>
+
+                                No Customers Available
+
+                            </h4>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        <!-- Pagination -->
+
+        {% if customers.has_other_pages %}
+
+        <div class="text-center">
+
+            <ul class="pagination">
+
+                {% if customers.has_previous %}
+
+                    <li>
+
+                        <a href="?page=1&search={{ search }}&gender={{ gender }}&status={{ status }}&sort={{ sort }}">
+
+                            First
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="?page={{ customers.previous_page_number }}&search={{ search }}&gender={{ gender }}&status={{ status }}&sort={{ sort }}">
+
+                            Previous
+
+                        </a>
+
+                    </li>
+
+                {% else %}
+
+                    <li class="disabled">
+
+                        <span>
+
+                            First
+
+                        </span>
+
+                    </li>
+
+                    <li class="disabled">
+
+                        <span>
+
+                            Previous
+
+                        </span>
+
+                    </li>
+
+                {% endif %}
+
+                {% for num in customers.paginator.page_range %}
+
+                    {% if customers.number == num %}
+
+                        <li class="active">
+
+                            <span>
+
+                                {{ num }}
+
+                            </span>
+
+                        </li>
+
+                    {% elif num > customers.number|add:'-3' and num < customers.number|add:'3' %}
+
+                        <li>
+
+                            <a href="?page={{ num }}&search={{ search }}&gender={{ gender }}&status={{ status }}&sort={{ sort }}">
+
+                                {{ num }}
+
+                            </a>
+
+                        </li>
+
+                    {% endif %}
+
+                {% endfor %}
+
+                {% if customers.has_next %}
+
+                    <li>
+
+                        <a href="?page={{ customers.next_page_number }}&search={{ search }}&gender={{ gender }}&status={{ status }}&sort={{ sort }}">
+
+                            Next
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="?page={{ customers.paginator.num_pages }}&search={{ search }}&gender={{ gender }}&status={{ status }}&sort={{ sort }}">
+
+                            Last
+
+                        </a>
+
+                    </li>
+
+                {% else %}
+
+                    <li class="disabled">
+
+                        <span>
+
+                            Next
+
+                        </span>
+
+                    </li>
+
+                    <li class="disabled">
+
+                        <span>
+
+                            Last
+
+                        </span>
+
+                    </li>
+
+                {% endif %}
+
+            </ul>
+
+        </div>
+
+        <div class="text-center">
+
+            <p>
+
+                Showing
+
+                <strong>
+
+                    {{ customers.start_index }}
+
+                </strong>
+
+                to
+
+                <strong>
+
+                    {{ customers.end_index }}
+
+                </strong>
+
+                of
+
+                <strong>
+
+                    {{ customers.paginator.count }}
+
+                </strong>
+
+                Customers
+
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
